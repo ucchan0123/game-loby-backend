@@ -4,18 +4,10 @@ namespace App\Utilities;
 
 use Illuminate\Validation\Rule;
 use App\Rules\PasswordCurrentRule;
-use Illuminate\Support\Facades\Auth;
 
 class ValidationRulesUtility
 {
-    private $request;
-
-    public function __construct($request = null)
-    {
-        $this->request = $request;
-    }
-
-    private function rules(): array
+    private static function rules(): array
     {
         return [
             'name'                      => [ 'name' => ['required', 'max:255'] ],
@@ -34,11 +26,11 @@ class ValidationRulesUtility
      * @param array $attributes
      * @return array
      */
-    public function getRules(array $attributes): array
+    public static function getRules(array $attributes): array
     {
         $rules = [];
         foreach ($attributes as $attribute) {
-            $rules += $this->rules()[$attribute] ?? [];
+            $rules += self::rules()[$attribute] ?? [];
         }
         return $rules;
     }

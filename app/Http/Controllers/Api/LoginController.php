@@ -15,7 +15,7 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return JsonResponseUtility::getJsonResponse([], 422, [__('auth.attempt_failed')]);
         }
 
