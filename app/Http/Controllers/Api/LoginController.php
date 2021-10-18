@@ -22,7 +22,7 @@ class LoginController extends Controller
         // アクティベーションチェック
         if (! Activation::completed(Auth::id())) {
             Auth::logout();
-            return JsonResponseUtility::getJsonResponse('validation', 422, [__('auth.activation_failed')]);
+            return JsonResponseUtility::getJsonResponse([], 422, [__('auth.activation_failed')]);
         }
 
         // ログインログを残す
