@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Activation;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +17,5 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory($this->create_user_num)->create();
-        Activation::factory($this->create_user_num)->create();
     }
 }

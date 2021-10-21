@@ -2,33 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ActivityLog;
 use App\Models\Activation;
 use App\Http\Requests\LoginRequest;
 use App\Utilities\JsonResponseUtility;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class LoginController extends Controller
+class LoginController extends ApiController
 {
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
 
+        // ログイン認証
         if (! Auth::attempt($credentials)) {
-            return JsonResponseUtility::getJsonResponse([], 422, [__('auth.attempt_failed')]);
+            return $this->responder->response([], 422, [__('auth.attempt_failed')]);
         }
 
-        // アクティベーションチェック
-        if (! Activation::completed(Auth::id())) {
+        // メールアドレス認証チェック
+        if ($request->user() instanceof MustVerifyEmail && ! $request->user()->hasVerifiedEmail()) {
             Auth::logout();
-            return JsonResponseUtility::getJsonResponse([], 422, [__('auth.activation_failed')]);
+            return $this->responder->response([], 401, [__('auth.email_not_verified')]);
         }
 
         // ログインログを残す
         ActivityLog::recordLogin(Auth::id());
 
-        return JsonResponseUtility::getJsonResponse();
+        return $this->responder->response();
     }
 
     public function logout()
@@ -39,6 +40,6 @@ class LoginController extends Controller
         //ログアウト
         Auth::logout();
 
-        return JsonResponseUtility::getJsonResponse();
+        return $this->responder->response();
     }
 }

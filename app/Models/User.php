@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\PasswordResetNotification;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -48,6 +48,11 @@ class User extends Authenticatable
     {
         $this->notify(new PasswordResetNotification($token));
     }
+
+    public function googleTwoFactor()
+{
+    return $this->hasOne(GoogleTwoFactor::class);
+}
 
     public static function userCreate($name, $email, $password, $nick_name = null)
     {

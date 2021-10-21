@@ -5,10 +5,17 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
-use App\Utilities\JsonResponseUtility;
+use App\Http\Responders\JsonResponder;
 
 abstract class ApiRequest extends FormRequest
 {
+    protected $responder;
+
+    public function __construct(JsonResponder $responder)
+    {
+        $this->responder = $responder;
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,6 +36,6 @@ abstract class ApiRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(JsonResponseUtility::getJsonResponse([], 422, $validator->errors()->all()));
+        throw new HttpResponseException($this->responder->response([], 422, $validator->errors()->all()));
     }
 }
