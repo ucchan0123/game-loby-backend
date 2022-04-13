@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\LoginController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    
 });
 
 // Route::group(['prefix' => 'google2fa'], function () {
