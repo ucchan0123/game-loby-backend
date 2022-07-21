@@ -2,9 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Api\LoginController;
 // use App\Http\Controllers\Api\GoogleTwoFactorController;
+use App\Models\User;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +21,27 @@ use App\Http\Controllers\Api\LoginController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+    
+// });
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    // Route::get('/user', function (Request $request) {
+    //     return $request->user();
+    // });
+
+    Route::get('/user', [AccountController::class, 'getUser']);
+    Route::get('/users', [AccountController::class, 'getUsers']);
+    
+    // Route::get('users', function () {
+    //     logger(Auth::get());
+    //     return User::get();
+    // });
+    // Route::get('online_users', function () {
+    //     return view('online_users');
+    // });
     
 });
 

@@ -17,7 +17,7 @@ class JsonResponder
     public function response($data = [], int $error_code = 200, ?array $error_messages = null): JsonResponse
     {
         return $this->responseFactory->json([
-            'data' => $data,
+            'payload' => $data,
             'error_messages' => $error_messages,
         ], $error_code);
     }
